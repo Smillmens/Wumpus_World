@@ -16,7 +16,7 @@ A metodologia de estudo de inteligência computacional usando o mundo de Wumpus 
 # Etapas do projeto
 O objetivo da criação do Mundo do Wumpus é a apredizagem com o desenvolvimento de inteligência artificial, para isso, gradativamete será entregue inteligência ao Agente para que ele possa resolver os problemas de forma mais eficiente. Essa evolução do Agente será realizada nas seguintes etapas.
 
-## Etapa 1 - Gerador aleatório de ambiente
+## 💠 Etapa 1 - Gerador aleatório de ambiente
 Nesta etapa será criado um ambiente da Caverna com tamanho a ser definido antes da inicialização. O ambiente deve ser de tamanho mínimo 3x3 e os elementos devem ser distribuídos de forma aleatória em quantidades proporcionais ao tamanho da mina. Além disso, as definição do Agente ainda não são relevantes, mas algumas regras devem ser consideradas.
 
 ### Elementos
@@ -43,7 +43,20 @@ Nessa etapa o Agente ainda não existe, mas deve-se levar em consideração o se
 
 <br>
 
-## Etapa 2 - Agente Reativo (versão 1)
-Texto, texto, texto, texto, texto, texto, texto, texto, texto, texto, texto, texto, texto, texto, texto, texto, texto, texto, texto, texto, texto, texto, texto, texto, texto, texto, texto, texto.
+## 💠 Etapa 2 - Agente Reativo (versão 1)
+Nesta etapa o Agente será adicionado ao ambiente e deve interagir com os elementos presentes.
+
+
+- o comportamento do agente é definido a partir do seu conjunto de regras;
+- Este conjunto de regras deve ser especificado por meio de uma tabela, aos moldes da que foi especificada, inicialmente na Aula 04;
+- A partir da especificação, o proximo passo é codificar o Agente e integrar ao gerador aleatório de ambientes de forma a possibilitar a realização de testes de validação para posterior avaliação de performace;
+- obs.: Serão projetadas várias versões deste agente. Nesta primeira versão, ele utiliza a apenas o conunto de regras como base de conhecimento, OU SEJA, NÃO TEM MEMÓRIA E NENHUM OUTRO MECANISMO MAIS OSFISTICADO PARA ESCOLHER QUAL DAS possíveis regras utilizar. Para isso, deve ser uma escolha aleatória. Além disso, ele tem apenas uma única flecha.
+
+
+
+Nesta etapa será criado um ambiente da Caverna com tamanho a ser definido antes da inicialização. O ambiente deve ser de tamanho mínimo 3x3 e os elementos devem ser distribuídos de forma aleatória em quantidades proporcionais ao tamanho da mina. Além disso, as definição do Agente ainda não são relevantes, mas algumas regras devem ser consideradas.
+
+
+
 
 
