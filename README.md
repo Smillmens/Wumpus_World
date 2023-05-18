@@ -19,6 +19,8 @@ O objetivo da criação do Mundo do Wumpus é a apredizagem com o desenvolviment
 ## 💠 Etapa 1 - Gerador aleatório de ambiente
 Nesta etapa será criado um ambiente da Caverna com tamanho a ser definido antes da inicialização. O ambiente deve ser de tamanho mínimo 3x3 e os elementos devem ser distribuídos de forma aleatória em quantidades proporcionais ao tamanho da mina. 
 
+[Termos](Termos.md)
+
 ### Elementos
 O ambiente deve conter os seguintes elementos:
 - **Ouro** - Objetivo do Agente, elemento neutro. 
