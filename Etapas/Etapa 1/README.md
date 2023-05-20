@@ -17,7 +17,9 @@ Cada elemento gera um tipo de percepção em torno de sua posição (Região) qu
 - **Fedor** - Percepção gerada pelo Wumpus enquanto estiver vivo.
 
 ## 💠 Lógicas
-- Dois elementos não podem ocupar a mesma Casa.
-- Duas ou mais Percepções podem ocupar a mesma Casa.
+- Dois elementos não podem ocupar a mesma Casa;
+- Duas ou mais Percepções iguais podem ocupar a mesma Casa;
+- Na casa do poço não pode ter nenhuma percepçõa;
+- Na casa do Ouro e do Wumpus pode ter percepção.
 
 # Links
