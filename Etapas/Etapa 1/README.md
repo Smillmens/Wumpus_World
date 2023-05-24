@@ -22,4 +22,6 @@ Cada elemento gera um tipo de percepção em torno de sua posição (Região) qu
 - Na casa do poço não pode ter nenhuma percepçõa;
 - Na casa do Ouro e do Wumpus pode ter percepção.
 
-# Links
+# Navegação
+* `WW_EP1_FIXO.py`: Arquivo contendo código para elaboração e teste de lógicas da Etapa 1.
+* `WW_EP1_VAR.py`: Arquivo contendo código final da Etapa 1.
