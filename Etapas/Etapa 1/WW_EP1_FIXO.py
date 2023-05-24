@@ -16,18 +16,16 @@ pré-definida:
 tm_caverna = 7 # Define a ordem da matriz quadrada <Caverna>
 caverna = [[0 for _ in range(tm_caverna)] for _ in range(tm_caverna)]
 
-# Distribuição e organização dos elementos
+# Distribuição e organização dos elementos:
 ouro = "(O)"
 poço = "(P)"
 wumpus = "(W)"
 
-caverna[3][1] = ouro       # Ouro posicionado na linha 0, coluna 3
-# caverna[2][1] = ouro       # Ouro posicionado na linha 0, coluna 3
-caverna[3][3] = poço      # Poço posicionado na linha 0, coluna 3
-# caverna[3][5] = poço       # ||
-# caverna[5][3] = poço       # ||
-caverna[3][0] = wumpus       # Wumpus posicionado na linha 0, coluna 1
+caverna[2][0] = ouro
+caverna[4][5] = poço
+caverna[4][4] = wumpus
 
+# Printado a caverna com os Elementos:
 print("Caverna com Elementos:")
 for linha in caverna:
     for celula in linha:
@@ -35,111 +33,50 @@ for linha in caverna:
     print()
 
 
-## Distribuição as Percepções dos Elementos
+# Distribuição as Percepções dos Elementos:
 brilho = "(*)" # Representação do Brilho
 brisa = "(-)"  # Representação da Brisa
 fedor = "($)"  # Representação do Fedor
 
+
+def dist_perp(percepcao, l, c): # Cria uma função para distribuir as Percepções
+    direcoes = [0,0,0,0]        # Matriz com as direções
+    if (l > 0):                 # Norte
+        direcoes[0] = (l-1, c)
+    if (l + 1 < tm_caverna):    # Sul
+        direcoes[1] = (l+1, c)
+    if (c + 1 < tm_caverna):    # Leste
+        direcoes[2] = (l, c+1)
+    if (c > 0):                 # Oeste
+        direcoes[3] = (l, c-1)
+    # Adiciona as Percepções no Ambiente
+    for direc in direcoes:
+        if direc != 0:
+            ll, cc = direc
+            if caverna[ll][cc] == 0 or caverna[ll][cc] == percepcao:
+                caverna[ll][cc] = percepcao
+            elif caverna[ll][cc] == poço:
+                caverna[ll][cc] = poço
+            else:
+                caverna[ll][cc] += percepcao
+
+
 for l in range(tm_caverna):
     for c in range(tm_caverna):
-        if caverna[l][c] !=0:
-            if caverna[l][c] == poço:   # DISTRIBUIÇÃO DA BRISA
-                if (l > 0): ################################################# NORTE
-                    if caverna[l-1][c] == 0 or caverna[l-1][c] == brisa:    # Se tiver 0 ou brisa, coloca brisa;
-                        caverna[l-1][c] = brisa
-                    elif caverna[l-1][c] == poço:                           # Se tiver poço, deixa poço;
-                        caverna[l-1][c] = poço
-                    else:
-                        caverna[l-1][c] += brisa                            # Se tiver outra coisa, incrementa na casa.
-                if (l + 1 < tm_caverna): #################################### SUL
-                    if caverna[l+1][c] == 0 or caverna[l+1][c] == brisa:
-                        caverna[l+1][c] = brisa
-                    elif caverna[l+1][c] == poço:
-                        caverna[l+1][c] = poço
-                    else:
-                        caverna[l+1][c] += brisa
-                if (c + 1 < tm_caverna): #################################### LESTE
-                    if caverna[l][c+1] == 0 or caverna[l][c+1] == brisa:
-                        caverna[l][c+1] = brisa
-                    elif caverna[l][c+1] == poço:
-                        caverna[l][c+1] = poço
-                    else:
-                        caverna[l][c+1] += brisa
-                if (c > 0): ################################################# OESTE
-                    if caverna[l][c-1] == 0 or caverna[l][c-1] == brisa:
-                        caverna[l][c-1] = brisa
-                    elif caverna[l][c-1] == poço:
-                        caverna[l][c-1] = poço
-                    else:
-                        caverna[l][c-1] += brisa
-            
-            
-            elif ouro in caverna[l][c] or caverna[l][c] == ouro:    # DISTRIBUIÇÃO DO BRILHO
-                if (l > 0): ######################### NORTE
-                    if caverna[l-1][c] == 0:        # Se tiver 0, coloca Brilho;
-                        caverna[l-1][c] = brilho
-                    elif caverna[l-1][c] == poço:   # Se tiver Poço, coloca Poço;
-                        caverna[l-1][c] = poço
-                    else:
-                        caverna[l-1][c] += brilho   # Senão, incrementa Brilho na casa.
-                if (l + 1 < tm_caverna): ############ SUL
-                    if caverna[l+1][c] == 0:
-                        caverna[l+1][c] = brilho
-                    elif caverna[l+1][c] == poço:
-                        caverna[l+1][c] = poço
-                    else:
-                        caverna[l+1][c] += brilho
-                if (c + 1 < tm_caverna): ############ LESTE
-                    if caverna[l][c+1] == 0:
-                        caverna[l][c+1] = brilho
-                    elif caverna[l][c+1] == poço:
-                        caverna[l][c+1] = poço
-                    else:
-                        caverna[l][c+1] += brilho
-                if (c > 0): ######################### OESTE
-                    if caverna[l][c-1] == 0:
-                        caverna[l][c-1] = brilho
-                    elif caverna[l][c-1] == poço:
-                        caverna[l][c-1] = poço
-                    else:
-                        caverna[l][c-1] += brilho
-            
-            
-            elif wumpus in caverna[l][c] or caverna[l][c] == wumpus: # DISTRIBUIÇÃO DO FEDOR
-                if (l > 0): ######################### NORTE
-                    if caverna[l-1][c] == 0:        # Se for 0, coloca Fedor
-                        caverna[l-1][c] = fedor
-                    elif caverna[l-1][c] == poço:   # Se for Poço, deixa Poço
-                        caverna[l-1][c] = poço
-                    else:
-                        caverna[l-1][c] += fedor    # Caso contrário, incrementa Fedor
-                if (l + 1 < tm_caverna): ############ SUL
-                    if caverna[l+1][c] == 0:
-                        caverna[l+1][c] = fedor
-                    elif caverna[l+1][c] == poço:
-                        caverna[l+1][c] = poço
-                    else:
-                        caverna[l+1][c] += fedor 
-                if (c + 1 < tm_caverna): ############ LESTE
-                    if caverna[l][c+1] == 0:
-                        caverna[l][c+1] = fedor
-                    elif caverna[l][c+1] == poço:
-                        caverna[l][c+1] = poço
-                    else:
-                        caverna[l][c+1] += fedor
-                if (c > 0): ######################### OESTE
-                    if caverna[l][c-1] == 0:
-                        caverna[l][c-1] = fedor
-                    elif caverna[l][c-1] == poço:
-                        caverna[l][c-1] = poço
-                    else:
-                        caverna[l][c-1] += fedor         
+        if caverna[l][c] != 0:
+            if caverna[l][c] == poço:                                # Quando for Poço
+                dist_perp(brisa,l,c)
+            elif ouro in caverna[l][c] or caverna[l][c] == ouro:     # Quando for Ouro
+                dist_perp(brilho,l,c)
+            elif wumpus in caverna[l][c] or caverna[l][c] == wumpus: # Quando for Wumpus
+                dist_perp(fedor,l,c)
 
 
-# Printado a caverna:
+# Printado a caverna com Percepções:
 print("__________")
 print("Caverna com Elementos e Percepções:")
 for linha in caverna:
     for celula in linha:
         print(celula, end="\t")
     print()
+    
