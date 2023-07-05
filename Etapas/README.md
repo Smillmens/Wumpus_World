@@ -1,7 +1,7 @@
 ⚠ ***IN PROGRESS*** ⚠
 
 <img src="Etapas/Ambientação.png" alt="Ambientação" width="500">
-<!-- Figure 1: 10/20 System Schematic -->
+<!-- Figure 1: Ambientação -->
 
 # Navegação
 * `Etapa 1`: Pasta contendo o desenvolvimento da etapa 1 - Criação do Ambiente
