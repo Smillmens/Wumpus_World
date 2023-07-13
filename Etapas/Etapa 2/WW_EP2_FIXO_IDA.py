@@ -1,7 +1,8 @@
 '''
 WUMPUS WORLD - ETAPA 2
 
-Objetivo: Criar o ambiente da caverna.
+Objetivo: Criar o ambiente da caverna e fazer o agente andar por ela.
+Missão do agente: Partir da entrada, pegar o ouro e voltar para a entrada sem morrer.
 
 Com intuito de inicialização e ambientação ao projeto do Mundo de Wumpus, esse código
 gera o ambiente em forma de matriz de ordem 4 com os elementos distribuidos de forma 
@@ -9,7 +10,12 @@ pré-definida:
     - 1 Ouro;
     - 3 Poços;
     - 1 Wumpus.
- 
+    
+Inicialmente a idéia aqui é fazer o agente ir até o ouro sem morrer. Ele pode matar o 
+Wumpus com base na quantidade de flechas e se o Wumpus morrer, ele e os fedores são 
+apagados do mapa. A mesma idéia vale para o ouro, se o agente o pegar, ele e os brilhos
+somem do mata. Porém esse dinãmica deve ser repensada para que a cada morte do agente,
+o ambiente resete.
 '''
 
 import random
@@ -17,9 +23,8 @@ import random
 '''
 ////////////////////// CRIAÇÃO DO AMBIENTE //////////////////////
 '''
-
 # Criando o ambiente Caverna:
-tm_caverna = 4 # Define a ordem da matriz quadrada <Caverna>
+tm_caverna = 4 # Define a ordem da matriz quadrada
 caverna = [[0 for _ in range(tm_caverna)] for _ in range(tm_caverna)]
 
 # Distribuição e organização dos elementos:
@@ -44,7 +49,6 @@ for linha in caverna:
 '''
 ////////////////////// DISTRIBUIÇÃO DE PERCEPÇÕES //////////////////////
 '''
-
 # Distribuição as Percepções dos Elementos:
 brilho = "(*)" # Representação do Brilho
 brisa = "(~)"  # Representação da Brisa
@@ -71,6 +75,7 @@ def dist_perp(percepcao, l, c): # Cria uma função para distribuir as Percepç�
             else:
                 caverna[ll][cc] += percepcao
 
+# Aplica as percepções na caverna:
 for l in range(tm_caverna):
     for c in range(tm_caverna):
         if caverna[l][c] != 0:
@@ -94,20 +99,20 @@ for linha in caverna:
 '''
 ////////////////////// MOVIMENTAÇÃO DO AGENTE //////////////////////
 '''
-
+# Variáveis auxiliares:
 agente_pos = (0, 0) # Posição inicial do agente
 ouro_encontrado = False # Variável para controlar se o ouro foi encontrado
 direc_cardinais = [(-1, 0), (1, 0), (0, 1), (0, -1)] # Movimentos possíveis: norte, sul, leste, oeste
-morte_pelo_poço = 0
-morte_pelo_wumpus = 0
-morte_do_wumpus = 0
-tentaiva_pegar_ouro =0 
-flechas = 5
+morte_pelo_poço = 0    # Contador da morte do agente pelo poço
+morte_pelo_wumpus = 0  # Contador da morte do agente pelo wumpus
+morte_do_wumpus = 0    # Contador da morte do Wumpus
+tentaiva_pegar_ouro =0 # Contador de tentativas do agente pegar o ouro
+flechas = 5            # Quantidade de flechas
 
 def posicao_in_caverna(linha, coluna): # Função para verificar se uma posição está dentro dos limites da caverna
     return 0 <= linha < tm_caverna and 0 <= coluna < tm_caverna
 
-def escolher_prox_casa(pos_atual_agente):
+def escolher_prox_casa(pos_atual_agente): # Função para escolher a próxima casa
     direc_sorteada = random.choice(direc_cardinais)  # Escolhe um movimento aleatório
     nova_pos = (pos_atual_agente[0] + direc_sorteada[0], pos_atual_agente[1] + direc_sorteada[1])    # Calcula a nova posição do agente
     return nova_pos
@@ -115,12 +120,10 @@ def escolher_prox_casa(pos_atual_agente):
 def mover_agente(): # Função para realizar o movimento do agente
     global agente_pos, ouro_encontrado, morte_pelo_poço, morte_pelo_wumpus, morte_do_wumpus, tentaiva_pegar_ouro, flechas 
     # print("começou a andar")
+    
     # Laço para pegar o ouro:
     while True:
-        nova_pos_agente = escolher_prox_casa(agente_pos)
-        # move = random.choice(direc_cardinais)  # Escolhe um movimento aleatório
-        # nova_pos = (agente_pos[0] + move[0], agente_pos[1] + move[1])    # Calcula a nova posição do agente
-                   
+        nova_pos_agente = escolher_prox_casa(agente_pos)                   
         if posicao_in_caverna(nova_pos_agente[0], nova_pos_agente[1]): # Verifica se ta nos limites da matriz
                      
             # Poço: (tá certo) 
@@ -142,8 +145,7 @@ def mover_agente(): # Função para realizar o movimento do agente
                             print("$$$$$$ casa selecionada para atirar",pos_casa_tiro)
                         else:
                             break  # Sai do loop se a posição estiver dentro dos limites da caverna
-                    
-                    
+                                        
                     if caverna[pos_casa_tiro[0]][pos_casa_tiro[1]] == wumpus:
                         morte_do_wumpus += 1
                         print(" ")
@@ -162,8 +164,7 @@ def mover_agente(): # Função para realizar o movimento do agente
                 elif flechas == 0:
                     print("As flechas acabaram ಥ_ಥ") 
                     break
-                 
-
+            
             # Wumpus:
             elif caverna[nova_pos_agente[0]][nova_pos_agente[1]] == wumpus:  # Verifica se a nova posição contém O Wumpus
                 agente_pos = (0, 0)  # Agente "morre" e volta para a posição inicial
@@ -204,14 +205,12 @@ def mover_agente(): # Função para realizar o movimento do agente
                     print(" ")
                     break
 
-            
             agente_pos = nova_pos_agente
             break
             
     # !Laço para volta do agente depois de ter pego o ouro.
 
 
-       
 # Loop principal do agente
 parada_segurança = 500
 contador = 0
