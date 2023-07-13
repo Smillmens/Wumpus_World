@@ -29,4 +29,4 @@ A penas o Agente pode realizar ações que são:
 <br>
 
 # Navegação
-* `WW_EP1_FIXO.py`: Arquivo contendo código para elaboração e teste de lógicas da Etapa 1.
+* `WW_EP2_FIXO_IDA.py`: Arquivo contendo código para criação de um ambiente fixo e movimentação do agente até pegar o ouro.
