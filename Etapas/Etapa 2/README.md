@@ -28,4 +28,5 @@ A penas o Agente pode realizar ações que são:
 
 <br>
 
-# Diretórios
+# Navegação
+* `WW_EP1_FIXO.py`: Arquivo contendo código para elaboração e teste de lógicas da Etapa 1.
