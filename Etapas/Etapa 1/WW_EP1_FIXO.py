@@ -12,8 +12,8 @@ pré-definida:
  
 '''
 
-# Criando o ambiente Caverna:
-tm_caverna = 7 # Define a ordem da matriz quadrada <Caverna>
+# Criando o ambiente caverna:
+tm_caverna = 7 # Define a ordem da matriz quadrada <caverna>
 caverna = [[0 for _ in range(tm_caverna)] for _ in range(tm_caverna)]
 
 # Distribuição e organização dos elementos:
@@ -25,7 +25,7 @@ caverna[2][0] = ouro
 caverna[4][5] = poço
 caverna[4][4] = wumpus
 
-# Printado a caverna com os Elementos:
+# Printado a caverna com os elementos:
 print("Caverna com Elementos:")
 for linha in caverna:
     for celula in linha:
@@ -39,7 +39,7 @@ brisa = "(-)"  # Representação da Brisa
 fedor = "($)"  # Representação do Fedor
 
 
-def dist_perp(percepcao, l, c): # Cria uma função para distribuir as Percepções
+def dist_perp(percepcao, l, c): # Cria uma função para distribuir as percepções
     direcoes = [0,0,0,0]        # Matriz com as direções
     if (l > 0):                 # Norte
         direcoes[0] = (l-1, c)
@@ -49,7 +49,7 @@ def dist_perp(percepcao, l, c): # Cria uma função para distribuir as Percepç�
         direcoes[2] = (l, c+1)
     if (c > 0):                 # Oeste
         direcoes[3] = (l, c-1)
-    # Adiciona as Percepções no Ambiente
+    # Adiciona as percepções no ambiente
     for direc in direcoes:
         if direc != 0:
             ll, cc = direc
@@ -64,17 +64,17 @@ def dist_perp(percepcao, l, c): # Cria uma função para distribuir as Percepç�
 for l in range(tm_caverna):
     for c in range(tm_caverna):
         if caverna[l][c] != 0:
-            if caverna[l][c] == poço:                                # Quando for Poço
+            if caverna[l][c] == poço:                                # Quando for poço
                 dist_perp(brisa,l,c)
-            elif ouro in caverna[l][c] or caverna[l][c] == ouro:     # Quando for Ouro
+            elif ouro in caverna[l][c] or caverna[l][c] == ouro:     # Quando for ouro
                 dist_perp(brilho,l,c)
-            elif wumpus in caverna[l][c] or caverna[l][c] == wumpus: # Quando for Wumpus
+            elif wumpus in caverna[l][c] or caverna[l][c] == wumpus: # Quando for wumpus
                 dist_perp(fedor,l,c)
 
 
-# Printado a caverna com Percepções:
+# Printado a caverna com percepções:
 print("__________")
-print("Caverna com Elementos e Percepções:")
+print("Caverna com elementos e percepções:")
 for linha in caverna:
     for celula in linha:
         print(celula, end="\t")
