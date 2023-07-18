@@ -14,7 +14,7 @@ pré-definida:
 Inicialmente a idéia aqui é fazer o agente ir até o ouro sem morrer. Ele pode matar o 
 Wumpus com base na quantidade de flechas e se o Wumpus morrer, ele e os fedores são 
 apagados do mapa. A mesma idéia vale para o ouro, se o agente o pegar, ele e os brilhos
-somem do mata. Porém esse dinãmica deve ser repensada para que a cada morte do agente,
+somem do mata. Porém esse dinâmica deve ser repensada para que a cada morte do agente,
 o ambiente resete.
 '''
 
@@ -24,14 +24,13 @@ import random
 ////////////////////// CRIAÇÃO DO AMBIENTE //////////////////////
 '''
 # Criando o ambiente Caverna:
-tm_caverna = 4 # Define a ordem da matriz quadrada
+tm_caverna = 4 # Define a ordem da matriz quadrada <Caverna>
 caverna = [[0 for _ in range(tm_caverna)] for _ in range(tm_caverna)]
 
 # Distribuição e organização dos elementos:
 ouro = "(O)"
 poço = "(P)"
 wumpus = "(W)"
-
 caverna[3][3] = ouro
 caverna[0][3] = poço
 caverna[2][0] = poço
@@ -49,7 +48,7 @@ for linha in caverna:
 '''
 ////////////////////// DISTRIBUIÇÃO DE PERCEPÇÕES //////////////////////
 '''
-# Distribuição as Percepções dos Elementos:
+# Percepções dos Elementos:
 brilho = "(*)" # Representação do Brilho
 brisa = "(~)"  # Representação da Brisa
 fedor = "($)"  # Representação do Fedor
@@ -64,8 +63,7 @@ def dist_perp(percepcao, l, c): # Cria uma função para distribuir as Percepç�
         direcoes[2] = (l, c+1)
     if (c > 0):                 # Oeste
         direcoes[3] = (l, c-1)
-    # Adiciona as Percepções no Ambiente
-    for direc in direcoes:
+    for direc in direcoes:      # Adiciona as Percepções no Ambiente
         if direc != 0:
             ll, cc = direc
             if caverna[ll][cc] == 0 or caverna[ll][cc] == percepcao:
@@ -75,7 +73,7 @@ def dist_perp(percepcao, l, c): # Cria uma função para distribuir as Percepç�
             else:
                 caverna[ll][cc] += percepcao
 
-# Aplica as percepções na caverna:
+# Distribuição das percepções:
 for l in range(tm_caverna):
     for c in range(tm_caverna):
         if caverna[l][c] != 0:
@@ -95,131 +93,126 @@ for linha in caverna:
     print()
 
 
-
 '''
 ////////////////////// MOVIMENTAÇÃO DO AGENTE //////////////////////
 '''
-# Variáveis auxiliares:
-agente_pos = (0, 0) # Posição inicial do agente
+agente_pos = (0, 0)     # Posição inicial do agente
 ouro_encontrado = False # Variável para controlar se o ouro foi encontrado
 direc_cardinais = [(-1, 0), (1, 0), (0, 1), (0, -1)] # Movimentos possíveis: norte, sul, leste, oeste
-morte_pelo_poço = 0    # Contador da morte do agente pelo poço
-morte_pelo_wumpus = 0  # Contador da morte do agente pelo wumpus
-morte_do_wumpus = 0    # Contador da morte do Wumpus
-tentaiva_pegar_ouro =0 # Contador de tentativas do agente pegar o ouro
-flechas = 5            # Quantidade de flechas
+morte_pelo_poço = 0     # Variável para contagem de mortes do agente pelo poço
+morte_pelo_wumpus = 0   # Variável para contagem de mortes do agente pelo poço
+morte_do_wumpus = 0     # Variável para contagem de mortes do wumpus
+tentaiva_pegar_ouro =0  # Variável para contagem das tentativas de pegar o ouro
+flechas = 5             # Quantidade de flechas
 
 def posicao_in_caverna(linha, coluna): # Função para verificar se uma posição está dentro dos limites da caverna
     return 0 <= linha < tm_caverna and 0 <= coluna < tm_caverna
 
-def escolher_prox_casa(pos_atual_agente): # Função para escolher a próxima casa
-    direc_sorteada = random.choice(direc_cardinais)  # Escolhe um movimento aleatório
-    nova_pos = (pos_atual_agente[0] + direc_sorteada[0], pos_atual_agente[1] + direc_sorteada[1])    # Calcula a nova posição do agente
+def escolher_prox_casa(pos_atual_agente): # Função para escolher uma próxima casa
+    direc_sorteada = random.choice(direc_cardinais) # Escolhe um movimento aleatório
+    nova_pos = (pos_atual_agente[0] + direc_sorteada[0], pos_atual_agente[1] + direc_sorteada[1]) # Calcula a nova posição do agente
     return nova_pos
 
 def mover_agente(): # Função para realizar o movimento do agente
     global agente_pos, ouro_encontrado, morte_pelo_poço, morte_pelo_wumpus, morte_do_wumpus, tentaiva_pegar_ouro, flechas 
-    # print("começou a andar")
-    
+    # print("começou a andar") # Informar quando o loop começa
     # Laço para pegar o ouro:
     while True:
-        nova_pos_agente = escolher_prox_casa(agente_pos)                   
+        nova_pos_agente = escolher_prox_casa(agente_pos)               # Chama a função para escolher a próxima casa para o agente
         if posicao_in_caverna(nova_pos_agente[0], nova_pos_agente[1]): # Verifica se ta nos limites da matriz
-                     
-            # Poço: (tá certo) 
+            # Caso seja um poço:
             if caverna[nova_pos_agente[0]][nova_pos_agente[1]] == poço:  # Verifica se a nova posição contém um poço
-                agente_pos = (0, 0)  # Agente "morre" e volta para a posição inicial
+                agente_pos = (0, 0)  # Agente morre e volta para a posição inicial
                 morte_pelo_poço += 1
-                print("Agente caiu no poço: ","(",nova_pos_agente[0],",",nova_pos_agente[1],")")
-                break
+                print("Agente caiu no poço: ",nova_pos_agente)
+                break # Reinicia o loop com o agente na entrada da caverna
 
-            # Mecânica da flecha
+            # Caso seja fedor:
             if str(caverna[nova_pos_agente[0]][nova_pos_agente[1]]).find(fedor) != -1: # Verifica se a posição tem fedor
-                if flechas >= 1:
+                if flechas >= 1: # Verifica se ainda tiver flechas
                     flechas -= 1
                     pos_casa_tiro = None  # Inicializa a variável antes do loop
+                    # Escolher uma casa para atirar:
                     while True:
-                        if pos_casa_tiro is None or not posicao_in_caverna(pos_casa_tiro[0], pos_casa_tiro[1]): # verifica se a posição tá dentro dos limites 
-                            pos_casa_tiro = escolher_prox_casa(nova_pos_agente)  # Atualiza a posição da casa
-                            print("$$$$$$ Posição onde o agente sentiu fedor",nova_pos_agente)
-                            print("$$$$$$ casa selecionada para atirar",pos_casa_tiro)
+                        if pos_casa_tiro is None or not posicao_in_caverna(pos_casa_tiro[0], pos_casa_tiro[1]): # Verifica se a posição tá dentro dos limites da caverna
+                            pos_casa_tiro = escolher_prox_casa(nova_pos_agente)                # Atualiza a posição da casa
+                            print("$$$$$$ Posição onde o agente sentiu fedor",nova_pos_agente) # Informar a posição do agente
+                            print("$$$$$$ casa selecionada para atirar",pos_casa_tiro)         # Informar a casa selecionada para atirar
                         else:
-                            break  # Sai do loop se a posição estiver dentro dos limites da caverna
-                                        
-                    if caverna[pos_casa_tiro[0]][pos_casa_tiro[1]] == wumpus:
+                            break  # Sai do loop quando acha uma casa dentro dos limites da caverna
+                    
+                    if caverna[pos_casa_tiro[0]][pos_casa_tiro[1]] == wumpus: # Se a casa escolhida para atirar tiver um wumpus:
                         morte_do_wumpus += 1
                         print(" ")
-                        print("Ahhhhhhhhh!!!! ") # grito
+                        print("Ahhhhhhhhh!!!! ") # Grito do wumpus
                         print("(Agente matou o Wumpus)")
                         print(" ")
-                        caverna[pos_casa_tiro[0]][pos_casa_tiro[1]] = 0 # tira o Wumpus do mapa
-                        # tira os fedores: 
-                        for l in range(tm_caverna):
+                        caverna[pos_casa_tiro[0]][pos_casa_tiro[1]] = 0 # Retira o wumpus do mapa
+                        for l in range(tm_caverna):                     # Retira os fedores:
                             for c in range(tm_caverna):
                                 if str(caverna[l][c]).find(fedor) != -1: 
                                     caverna[l][c] = caverna[l][c].replace(fedor,'')
-                    else:
+                    else: # Se a casa escolhida não tiver o wumpus:
                         print("O agente não matou o Wumpus, Restam ", flechas," flechas")
-                        break             
-                elif flechas == 0:
+                        break      # Reinicia o loop
+                elif flechas == 0: # Caso as flechas tenham acabado
                     print("As flechas acabaram ಥ_ಥ") 
-                    break
-            
-            # Wumpus:
-            elif caverna[nova_pos_agente[0]][nova_pos_agente[1]] == wumpus:  # Verifica se a nova posição contém O Wumpus
-                agente_pos = (0, 0)  # Agente "morre" e volta para a posição inicial
-                morte_pelo_wumpus += 1
-                print("Agente morreu Wumpus: ","(",nova_pos_agente[0],",",nova_pos_agente[1],")")
-                break
-            
-            # Ouro/Brilho: !(precisa colocar a questão da percepção)
-            elif str(caverna[nova_pos_agente[0]][nova_pos_agente[1]]).find(brilho) != -1: 
-                pos_casa_pegar_ouro = None  # Inicializa a variável antes do loop
+                    break # Reinicia o loop
+                 
 
+            # Caso seja wumpus:
+            elif caverna[nova_pos_agente[0]][nova_pos_agente[1]] == wumpus:  # Verifica se a nova posição contém O Wumpus
+                agente_pos = (0, 0)  # Agente morre e volta para a posição inicial
+                morte_pelo_wumpus += 1
+                print("Agente morreu Wumpus: ",nova_pos_agente)
+                break # Reinicia o loop
+            
+            # Caso seja brilho:
+            elif str(caverna[nova_pos_agente[0]][nova_pos_agente[1]]).find(brilho) != -1: # Verifica se a posição tem brilho
+                pos_casa_pegar_ouro = None  # Inicializa a variável antes do loop
+                # Escolher uma casa para pegar:
                 while True:
-                    if pos_casa_pegar_ouro is None or not posicao_in_caverna(pos_casa_pegar_ouro[0], pos_casa_pegar_ouro[1]): # verifica se a posição tá dentro dos limites 
-                        pos_casa_pegar_ouro = escolher_prox_casa(nova_pos_agente)  # Atualiza a posição da casa
-                        print("--------- Posição onde o agente sentiu brilho",nova_pos_agente)
-                        print("--------- casa selecionada para pegar o ouro",pos_casa_pegar_ouro)
+                    if pos_casa_pegar_ouro is None or not posicao_in_caverna(pos_casa_pegar_ouro[0], pos_casa_pegar_ouro[1]): # verifica se a posição tá dentro dos limites da caverna
+                        pos_casa_pegar_ouro = escolher_prox_casa(nova_pos_agente)                 # Atualiza a posição da casa
+                        print("--------- Posição onde o agente sentiu brilho",nova_pos_agente)    # Informar a posição do agente
+                        print("--------- casa selecionada para pegar o ouro",pos_casa_pegar_ouro) # Informar a posição para pegar
                     else:
                         break  # Sai do loop se a posição estiver dentro dos limites da caverna
 
-                if caverna[pos_casa_pegar_ouro[0]][pos_casa_pegar_ouro[1]] == ouro:  # Verifica se o agente encontrou o ouro
+                if caverna[pos_casa_pegar_ouro[0]][pos_casa_pegar_ouro[1]] == ouro: # Se a casa escolhida para pegar tiver o ouro:
                     ouro_encontrado = True
-                    caverna[pos_casa_pegar_ouro[0]][pos_casa_pegar_ouro[1]] = 0
-                    # tira os brilhos: 
-                    for l in range(tm_caverna):
+                    agente_pos = pos_casa_pegar_ouro                            # Agente vai para a posição
+                    caverna[pos_casa_pegar_ouro[0]][pos_casa_pegar_ouro[1]] = 0 # Retira o ouro da caverna
+                    for l in range(tm_caverna):                                 # Retira os brilhos
                         for c in range(tm_caverna):
-                            if str(caverna[l][c]).find(brilho) != -1: # Verifica se a posição tem fedor
+                            if str(caverna[l][c]).find(brilho) != -1:
                                 caverna[l][c] = caverna[l][c].replace(brilho,'')
-                    print(" ") # grito
-                    print("Pegou o ouro")
                     print(" ")
-                    # break
-                else:
-                    agente_pos = pos_casa_pegar_ouro
+                    print("Pegou o ouro") # Informa que o ouro foi pego
+                    print(" ")
+                else: # Caso não tenha ouro
+                    agente_pos = pos_casa_pegar_ouro # Agente vai para a posição
                     tentaiva_pegar_ouro += 1
                     print(" ")
-                    print("---- Não pegou o ouro, na casa:", pos_casa_pegar_ouro)
-                    print("---- Posição do agente", agente_pos)
+                    print("---- Não pegou o ouro, na casa:", pos_casa_pegar_ouro) # Informa que não pegou na casa()
+                    print("---- Posição do agente", agente_pos)                   # Informa a posiçõa do agente
                     print(" ")
-                    break
+                    break # Reinicia o loop
 
-            agente_pos = nova_pos_agente
-            break
             
-    # !Laço para volta do agente depois de ter pego o ouro.
-
-
-# Loop principal do agente
-parada_segurança = 500
-contador = 0
-while (not ouro_encontrado) and (contador < parada_segurança): 
+            agente_pos = nova_pos_agente # Nova a posição do agente
+            break # Reinicia o loop
+            
+     
+# Loop principal do agente:
+parada_segurança = 500 # Variável para parar o loop de pois de N iterações
+contador = 0           # Variável para contar o numero de iterações
+while (not ouro_encontrado) and (contador < parada_segurança): # Laço para fazer o agente andar enquanto não pega o ouro e não atinge a parada
     mover_agente()
-    # print("Posição do agente:", agente_pos)
+    print("Posição do agente:", agente_pos)
     contador += 1
 
-if ouro_encontrado:
+if ouro_encontrado: # Se o ouro for encontrado ao final do laço while:
     print(" ")
     print("⋰⋱⋰⋱⋰⋱⋰⋱⋰⋱⋰⋱⋰⋱")
     print("Ouro encontrado!")
@@ -227,7 +220,7 @@ if ouro_encontrado:
     print("⋱⋰⋱⋰⋱⋰⋱⋰⋱⋰⋱⋰⋱⋰")
     print(" ")
     print("Numero de iterações = ",contador)
-else:
+else: # Se o numero de iterações limite for alcançado:
     print(" ")
     print("⋰⋱⋰⋱⋰⋱⋰⋱⋰⋱⋰⋱⋰⋱⋰⋱⋰⋱⋰⋱⋰⋱⋰⋱⋰⋱")
     print("           (●__●)  ")
@@ -239,11 +232,3 @@ print("Morte pelo poço: ",morte_pelo_poço)
 print("Morte pelo Wumpus: ",morte_pelo_wumpus)
 print("Morte do Wumpus: ", morte_do_wumpus)
 print("Tentaivas de pegar o ouro: ", tentaiva_pegar_ouro)
-
-# # Printado a caverna com Percepções:
-# print("__________")
-# print("Caverna com Elementos e Percepções:")
-# for linha in caverna:
-#     for celula in linha:
-#         print(celula, end="\t")
-#     print()
