@@ -1,7 +1,7 @@
 # Termos e definições do Mundo de Wumpus***
 
 ## Ambientação
-- Caverna
+- Caverna: Ambiente do 
 - Casa
 - Parede/limites
 - Região
