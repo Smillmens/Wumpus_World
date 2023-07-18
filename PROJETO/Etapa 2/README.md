@@ -90,5 +90,6 @@ adicionar uma quantidade de vida ao agente, quando morre perde uma vida?
 <br>
 
 # Navegação
+* `Mapeamento.xlsx`: Arquivo contendo a tabela do conjunto de regras do agente
 * `WW_EP2_FIXO_IDA.py`: Arquivo contendo código para criação de um ambiente fixo e movimentação do agente até pegar o ouro.
 * `WW_EP2_VAR_IDA.py`: Arquivo contendo código para criação de um ambiente e movimentação do agente, até pegar o ouro, de forma aleatória.
