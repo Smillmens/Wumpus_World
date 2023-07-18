@@ -84,7 +84,9 @@ adicionar uma quantidade de vida ao agente, quando morre perde uma vida?
 - - código para pegar ouro
 - if vidas == 0:
 - - game over
- 
+<br>
+⚠ ***IN PROGRESS*** ⚠
+
 <br>
 
 # Navegação
