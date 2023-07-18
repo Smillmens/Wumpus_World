@@ -1,4 +1,4 @@
-# Termos e definições do Mundo de Wumpus***
+# Termos e definições do Mundo de Wumpus
 
 ## Ambientação
 - Agente - unidade que irá interagir com os elementos, sentir as percepções e realizar ações.
